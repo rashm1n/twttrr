@@ -1,0 +1,9 @@
+POST http://localhost:8090/tweets
+Content-Type: application/json
+
+{
+  "content": "Stn up my twtr 8",
+  "userId": "rashm1n-00001"
+}
+
+#GET http://localhost:8090/tweets/c223a0b1-7e96-489c-9504-e7535f07c407

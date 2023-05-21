@@ -1,0 +1,25 @@
+version: '3.9'
+services:
+  follower-redis:
+    image: redis:7-alpine
+    container_name: follower-redis
+    ports:
+      - "26379:6379"
+    networks:
+      - twtrr-follower-network
+    restart: always
+
+  follower-service:
+    image: follower-service:1.0.0-SNAPSHOT
+    container_name: follower-service
+    depends_on:
+      - follower-redis
+    ports:
+      - "9099:9099"
+    networks:
+      - twtrr-follower-network
+
+networks:
+  twtrr-follower-network:
+      name: twtrr-follower-network
+      driver: bridge

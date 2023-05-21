@@ -1,0 +1,7 @@
+POST http://localhost:9099/followers
+Content-Type: application/json
+
+{
+  "user_id": "rashm1n-00001",
+  "follower_id": "hash1ni-00004"
+}

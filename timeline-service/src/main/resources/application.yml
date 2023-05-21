@@ -1,0 +1,5 @@
+spring:
+  kafka:
+    bootstrap-servers: broker1:9092
+server:
+  port: ${TWTRR-TIMELINE-SERVICE-PORT}

@@ -1,0 +1,15 @@
+server:
+  port: 8090
+
+spring:
+  jpa:
+    database: oracle
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521/freepdb1
+    username: tweetDb
+    password: pwd
+
+  kafka:
+    bootstrap-servers: localhost:19092

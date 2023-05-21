@@ -1,0 +1,80 @@
+version: '3'
+
+# Configuring Kafka for access across networks see
+    # https://www.confluent.io/blog/kafka-client-cannot-connect-to-broker-on-aws-on-docker-etc/
+    # ./kafka-topics --create --bootstrap-server localhost:9092 --topic helloWorld --partitions 3 --replication-factor 1
+    # ./kafka-topics --list --bootstrap-server localhost:9092
+    # ./kafka-topics --bootstrap-server localhost:9092 --describe --topic helloWorld
+    # ./kafka-console-producer --bootstrap-server localhost:9092 --topic helloWorld
+    # ./kafka-console-consumer --bootstrap-server localhost:9092 --topic helloWorld --from-beginning
+
+services:
+  # cassandra-rredd1t:
+  #   image: cassandra:latest
+  #   ports:
+  #     - '9042:9042'
+  
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - twtrr-kafka-network
+  broker1:
+    image: confluentinc/cp-kafka:latest
+    container_name: broker1
+    ports:
+      - "19092:19092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_ADVERTISED_LISTENERS: OUTSIDE://localhost:19092,INTERNAL://broker1:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:19092
+    networks:
+      - twtrr-kafka-network
+  broker2:
+    image: confluentinc/cp-kafka:latest
+    container_name: broker2
+    ports:
+      - "29092:29092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_ADVERTISED_LISTENERS: OUTSIDE://localhost:29092,INTERNAL://broker2:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:29092
+    networks:
+      - twtrr-kafka-network
+  broker3:
+    image: confluentinc/cp-kafka:latest
+    container_name: broker3
+    ports:
+      - "39092:39092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_ADVERTISED_LISTENERS: OUTSIDE://localhost:39092,INTERNAL://broker3:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:39092
+    networks:
+      - twtrr-kafka-network
+
+networks:
+  twtrr-kafka-network:
+    name: twtrr-kafka-network
+    driver: bridge

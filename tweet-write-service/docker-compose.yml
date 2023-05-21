@@ -1,0 +1,14 @@
+version: '3'
+services:
+  tweet-db:
+    container_name: tweet-db
+    image: gvenzl/oracle-free:latest
+    ports:
+      - "1521:1521"
+    environment:
+      ORACLE_PASSWORD: password
+#    networks:
+#      - tweet-network
+#networks:
+#  tweet-network:
+#    driver: bridge

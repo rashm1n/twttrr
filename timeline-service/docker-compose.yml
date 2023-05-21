@@ -1,0 +1,63 @@
+version: '3.9'
+services:
+  redis-timeline:
+    container_name: redis-timeline
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+        - twtrr-timeline-network
+
+  twtrr-timeline-service-1:
+    container_name: twtrr-timeline-service-1
+    image: timeline-service:1.0.1-SNAPSHOT
+    restart: always
+    depends_on:
+      - redis-timeline
+    ports:
+      - "9095:9095"
+    environment:
+      TWTRR-TIMELINE-SERVICE-PORT: 9095
+      TIMELINE_SERVER_ID: 1
+    networks:
+        - twtrr-kafka-network
+        - twtrr-timeline-network
+
+  twtrr-timeline-service-2:
+    container_name: twtrr-timeline-service-2
+    image: timeline-service:1.0.1-SNAPSHOT
+    restart: always
+    depends_on:
+      - redis-timeline
+    ports:
+      - "9096:9096"
+    environment:
+      TWTRR-TIMELINE-SERVICE-PORT: 9096
+      TIMELINE_SERVER_ID: 2
+    networks:
+      - twtrr-kafka-network
+      - twtrr-timeline-network
+
+  twtrr-timeline-service-3:
+    container_name: twtrr-timeline-service-3
+    image: timeline-service:1.0.1-SNAPSHOT
+    restart: always
+    depends_on:
+      - redis-timeline
+    ports:
+      - "9097:9097"
+    environment:
+      TWTRR-TIMELINE-SERVICE-PORT: 9097
+      TIMELINE_SERVER_ID: 3
+    networks:
+      - twtrr-kafka-network
+      - twtrr-timeline-network
+
+networks:
+  twtrr-timeline-network:
+    name: twtrr-timeline-network
+    driver: bridge
+  twtrr-kafka-network:
+    name: twtrr-kafka-network
+    external: true
