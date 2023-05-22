@@ -1,6 +1,5 @@
 package com.rashm1n.twtr.tweetwriteservice.controller;
 
-import com.rashm1n.twtr.tweetwriteservice.exception.TweetNotFoundException;
 import com.rashm1n.twtr.tweetwriteservice.model.TimelineDTO;
 import com.rashm1n.twtr.tweetwriteservice.model.Tweet;
 import com.rashm1n.twtr.tweetwriteservice.model.TweetRequestDTO;
