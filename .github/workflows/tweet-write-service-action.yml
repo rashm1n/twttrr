@@ -1,0 +1,19 @@
+name: Tweet Write Service Build and Docker Push
+
+on:
+  push:
+    paths:
+      - 'tweet-write-service/**'  # Adjust the path to the microservice folder
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build and push Docker image
+        working-directory: tweet-write-service/  # Adjust the path to the microservice folder
+        run: |
+          docker build -t twttrr-tweet-write-svc:latest .
