@@ -33,6 +33,6 @@ public class KafkaProducerConfig {
 
     @Bean
     public KafkaTemplate<String, TweetMessageDTO> kafkaTemplate(ProducerFactory<String, TweetMessageDTO> producerFactory) {
-        return new KafkaTemplate<String, TweetMessageDTO>(producerFactory);
+        return new KafkaTemplate<>(producerFactory);
     }
 }
