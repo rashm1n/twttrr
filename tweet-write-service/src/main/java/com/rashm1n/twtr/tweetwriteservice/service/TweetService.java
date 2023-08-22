@@ -7,10 +7,10 @@ import com.rashm1n.twtr.tweetwriteservice.model.TweetRequestDTO;
 import com.rashm1n.twtr.tweetwriteservice.model.message.TweetMessageDTO;
 import com.rashm1n.twtr.tweetwriteservice.repository.TweetRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +18,8 @@ import java.util.UUID;
 
 @Service
 public class TweetService {
+    @Value("${tweet-write-svc.kafka.topic}")
+    private String topic;
     private final TweetRepository tweetRepository;
     private final KafkaTemplate kafkaTemplate;
 
@@ -34,7 +36,7 @@ public class TweetService {
     public Tweet createTweet(TweetRequestDTO tweetRequestDTO) {
         Tweet tweet = tweetRepository.save(new Tweet(UUID.randomUUID().toString(), tweetRequestDTO.getContent(), tweetRequestDTO.getUserId(),
                 Instant.now()));
-        kafkaTemplate.send("tweet", tweet.getUserId(), new TweetMessageDTO(
+        kafkaTemplate.send(topic, tweet.getUserId(), new TweetMessageDTO(
                 tweet.getUserId(),
                 tweet.getUuid().toString(),
                 tweet.getCreatedAt(),
@@ -54,7 +56,7 @@ public class TweetService {
         if (tweet.isPresent()) {
             fetchedTweet = tweet.get();
             tweetRepository.deleteById(uuid);
-            kafkaTemplate.send("tweet", fetchedTweet.getUserId(), new TweetMessageDTO(
+            kafkaTemplate.send(topic, fetchedTweet.getUserId(), new TweetMessageDTO(
                     fetchedTweet.getUserId(),
                     fetchedTweet.getUuid().toString(),
                     fetchedTweet.getCreatedAt(),
