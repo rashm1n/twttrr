@@ -28,6 +28,7 @@ public class KafkaProducerConfig {
     @Bean
     public ProducerFactory<String, TweetMessageDTO> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfig());
+
     }
 
     @Bean
