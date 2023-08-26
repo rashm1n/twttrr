@@ -11,8 +11,8 @@ spring:
     username: ${TWEET_WRITE_ORACLE_DB_USERNAME} #tweetDb
     password: ${TWEET_WRITE_ORACLE_DB_PASSWORD} #pwd
 
-kafka:
-  bootstrap-servers: ${TWEET_WRITE_KAFKA_BOOTSTRAP_URL} #localhost:19092
+  kafka:
+    bootstrap-servers: ${TWEET_WRITE_KAFKA_BOOTSTRAP_URL} #localhost:19092
 
 tweet-write-svc:
   kafka:
