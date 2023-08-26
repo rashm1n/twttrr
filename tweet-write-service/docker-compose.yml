@@ -7,8 +7,8 @@ services:
       - "1521:1521"
     environment:
       ORACLE_PASSWORD: password
-#    networks:
-#      - tweet-network
-#networks:
-#  tweet-network:
-#    driver: bridge
+    networks:
+      - tweet-network
+networks:
+  tweet-network:
+    driver: bridge
