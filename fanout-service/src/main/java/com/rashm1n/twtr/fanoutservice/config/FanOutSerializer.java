@@ -11,7 +11,8 @@ import java.util.Map;
 public class FanOutSerializer implements Serializer<FanOutMessageDTO> {
     ObjectMapper objectMapper = Jackson2ObjectMapperBuilder.json().build();
 
-    @Override public void configure(Map<String, ?> configs, boolean isKey) {
+    @Override
+    public void configure(Map<String, ?> configs, boolean isKey) {
         Serializer.super.configure(configs, isKey);
     }
 
