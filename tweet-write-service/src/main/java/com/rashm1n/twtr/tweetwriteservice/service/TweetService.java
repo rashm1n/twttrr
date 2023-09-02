@@ -23,7 +23,7 @@ public class TweetService {
     private final TweetRepository tweetRepository;
     private final KafkaTemplate kafkaTemplate;
 
-    public TweetService(TweetRepository tweetRepository, @Qualifier("kafkaTemplate") KafkaTemplate<String, TweetMessageDTO> kafkaTemplate) {
+    public TweetService(TweetRepository tweetRepository, @Qualifier("tweetKafkaTemplate") KafkaTemplate<String, TweetMessageDTO> kafkaTemplate) {
         this.tweetRepository = tweetRepository;
         this.kafkaTemplate = kafkaTemplate;
     }
@@ -35,7 +35,7 @@ public class TweetService {
 
     public Tweet createTweet(TweetRequestDTO tweetRequestDTO) {
         Tweet tweet = tweetRepository.save(new Tweet(UUID.randomUUID().toString(), tweetRequestDTO.getContent(), tweetRequestDTO.getUserId(),
-                Instant.now()));
+                Instant.now(), 0));
         kafkaTemplate.send(topic, tweet.getUserId(), new TweetMessageDTO(
                 tweet.getUserId(),
                 tweet.getUuid().toString(),
@@ -65,7 +65,10 @@ public class TweetService {
         } else {
             throw new TweetNotFoundException();
         }
+    }
 
+    public Optional<Tweet> getTweetOptionalById(String uuid) {
+        return tweetRepository.findById(uuid);
     }
 
     public List<Tweet> getAllTweets() {
