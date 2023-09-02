@@ -15,16 +15,22 @@ public class Tweet {
     private String content;
     private String userId;
     private Instant createdAt;
-
+    private int retweetCount;
 
     public Tweet() {
     }
 
-    public Tweet(String uuid, String content, String userId, Instant createdAt) {
+    public Tweet(String uuid, String content, String userId, Instant createdAt, int retweetCount) {
         this.uuid = uuid;
         this.content = content;
         this.userId = userId;
         this.createdAt = createdAt;
+        this.retweetCount = retweetCount;
+    }
+
+    public Tweet incrementRetweetCount() {
+        this.retweetCount++;
+        return this;
     }
 
     public String getUuid() {
@@ -57,5 +63,18 @@ public class Tweet {
 
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public int getRetweetCount() {
+        return retweetCount;
+    }
+
+    public void setRetweetCount(int retweetCount) {
+        this.retweetCount = retweetCount;
+    }
+
+    public Tweet decrementRetweetCount() {
+        this.retweetCount--;
+        return this;
     }
 }
