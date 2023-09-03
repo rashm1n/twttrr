@@ -17,3 +17,4 @@ spring:
 tweet-write-svc:
   kafka:
     topic: ${TWEET_WRITE_KAFKA_TOPIC} # tweet
+    client-id: ${TWEET_WRITE_KAFKA_CLIENT_ID} # tweet-write-svc

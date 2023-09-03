@@ -4,6 +4,7 @@ import com.rashm1n.twtr.tweetwriteservice.exception.TweetNotFoundException;
 import com.rashm1n.twtr.tweetwriteservice.model.TimelineDTO;
 import com.rashm1n.twtr.tweetwriteservice.model.Tweet;
 import com.rashm1n.twtr.tweetwriteservice.model.TweetRequestDTO;
+import com.rashm1n.twtr.tweetwriteservice.model.message.LikeMessageDTO;
 import com.rashm1n.twtr.tweetwriteservice.model.message.TweetMessageDTO;
 import com.rashm1n.twtr.tweetwriteservice.repository.TweetRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,7 +36,7 @@ public class TweetService {
 
     public Tweet createTweet(TweetRequestDTO tweetRequestDTO) {
         Tweet tweet = tweetRepository.save(new Tweet(UUID.randomUUID().toString(), tweetRequestDTO.getContent(), tweetRequestDTO.getUserId(),
-                Instant.now(), 0));
+                Instant.now(), 0,0));
         kafkaTemplate.send(topic, tweet.getUserId(), new TweetMessageDTO(
                 tweet.getUserId(),
                 tweet.getUuid().toString(),
@@ -78,5 +79,25 @@ public class TweetService {
     public TimelineDTO getAllTweetsByUserId(String userId) {
         List<Tweet> tweets = tweetRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
         return new TimelineDTO(userId, tweets);
+    }
+
+    public Tweet likeTweet(LikeMessageDTO likeMessageDTO) {
+        Optional<Tweet> tweet = tweetRepository.findById(likeMessageDTO.getTweetId());
+        if (tweet.isPresent()) {
+            Tweet fetchedTweet = tweet.get();
+            fetchedTweet.incrementLikesCount();
+            return tweetRepository.save(fetchedTweet);
+        }
+        return null;
+    }
+
+    public Tweet unlikeTweet(LikeMessageDTO likeMessageDTO) {
+        Optional<Tweet> tweet = tweetRepository.findById(likeMessageDTO.getTweetId());
+        if (tweet.isPresent()) {
+            Tweet fetchedTweet = tweet.get();
+            fetchedTweet.decrementLikesCount();
+            return tweetRepository.save(fetchedTweet);
+        }
+        return null;
     }
 }

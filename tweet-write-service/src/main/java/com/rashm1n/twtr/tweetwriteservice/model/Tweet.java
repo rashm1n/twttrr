@@ -16,16 +16,18 @@ public class Tweet {
     private String userId;
     private Instant createdAt;
     private int retweetCount;
+    private int likesCount;
 
     public Tweet() {
     }
 
-    public Tweet(String uuid, String content, String userId, Instant createdAt, int retweetCount) {
+    public Tweet(String uuid, String content, String userId, Instant createdAt, int retweetCount, int likesCount) {
         this.uuid = uuid;
         this.content = content;
         this.userId = userId;
         this.createdAt = createdAt;
         this.retweetCount = retweetCount;
+        this.likesCount = likesCount;
     }
 
     public Tweet incrementRetweetCount() {
@@ -73,8 +75,26 @@ public class Tweet {
         this.retweetCount = retweetCount;
     }
 
+    public int getLikesCount() {
+        return likesCount;
+    }
+
+    public void setLikesCount(int likesCount) {
+        this.likesCount = likesCount;
+    }
+
     public Tweet decrementRetweetCount() {
         this.retweetCount--;
+        return this;
+    }
+
+    public Tweet incrementLikesCount() {
+        this.likesCount++;
+        return this;
+    }
+
+    public Tweet decrementLikesCount() {
+        this.likesCount--;
         return this;
     }
 }
