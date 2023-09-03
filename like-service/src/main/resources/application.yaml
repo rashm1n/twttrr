@@ -1,0 +1,7 @@
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_URL} #localhost:19092
+
+like-svc:
+  kafka:
+    topic: ${LIKE_KAFKA_TOPIC} # like
