@@ -72,8 +72,8 @@ public class TweetService {
         Optional<Tweet> optionalTweet = tweetRepository.findById(tweet.getReferenceTweetId());
         if (optionalTweet.isPresent()) {
             fetchedTweet = optionalTweet.get();
-            tweetRepository.deleteById(tweet.getUuid());
-            Tweet savedTweet = tweetRepository.save(fetchedTweet.incrementRetweetCount());
+            Tweet savedTweet = tweetRepository.save(tweet);
+            tweetRepository.save(fetchedTweet.incrementRetweetCount());
             sendTweetMessage(savedTweet, TweetMessageDTO.Action.CREATED);
             return savedTweet;
         } else {
