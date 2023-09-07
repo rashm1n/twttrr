@@ -3,6 +3,7 @@ package com.rashm1n.twtr.tweetwriteservice.controller;
 import com.rashm1n.twtr.tweetwriteservice.exception.TweetNotFoundException;
 import com.rashm1n.twtr.tweetwriteservice.model.Retweet;
 import com.rashm1n.twtr.tweetwriteservice.model.RetweetDTO;
+import com.rashm1n.twtr.tweetwriteservice.model.Tweet;
 import com.rashm1n.twtr.tweetwriteservice.service.RetweetService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class RetweetController {
     }
 
     @PostMapping
-    public ResponseEntity<Retweet> createRetweet(@RequestBody RetweetDTO retweetDTO) {
+    public ResponseEntity<Tweet> createRetweet(@RequestBody RetweetDTO retweetDTO) {
         return ResponseEntity.ok(retweetService.createRetweet(retweetDTO));
     }
 

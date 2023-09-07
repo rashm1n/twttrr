@@ -15,19 +15,84 @@ public class Tweet {
     private String content;
     private String userId;
     private Instant createdAt;
+    private String referenceTweetId;
     private int retweetCount;
     private int likesCount;
     private String parentTweetId;
 
-    public Tweet() {
+    public static TweetBuilder builder() {
+        return new TweetBuilder();
     }
 
-    public Tweet(String uuid, String content, String userId, Instant createdAt, int retweetCount, int likesCount,
-            String parentTweetId) {
+    public static class TweetBuilder {
+        private String uuid;
+        private String content;
+        private String userId;
+        private Instant createdAt;
+        private String referenceTweetId;
+        private int retweetCount;
+        private int likesCount;
+        private String parentTweetId;
+
+        public TweetBuilder() {
+            this.uuid = UUID.randomUUID().toString();
+        }
+
+        public TweetBuilder uuid(String uuid) {
+            this.uuid = uuid;
+            return this;
+        }
+
+        public TweetBuilder content(String content) {
+            this.content = content;
+            return this;
+        }
+
+        public TweetBuilder userId(String userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public TweetBuilder createdAt(Instant createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public TweetBuilder referenceTweetId(String referenceTweetId) {
+            this.referenceTweetId = referenceTweetId;
+            return this;
+        }
+
+        public TweetBuilder retweetCount(int retweetCount) {
+            this.retweetCount = retweetCount;
+            return this;
+        }
+
+        public TweetBuilder likesCount(int likesCount) {
+            this.likesCount = likesCount;
+            return this;
+        }
+
+        public TweetBuilder parentTweetId(String parentTweetId) {
+            this.parentTweetId = parentTweetId;
+            return this;
+        }
+
+        public Tweet build() {
+            return new Tweet(uuid, content, userId, createdAt, referenceTweetId, retweetCount, likesCount, parentTweetId);
+        }
+    }
+
+    protected Tweet() {
+    }
+
+    private Tweet(String uuid, String content, String userId, Instant createdAt, String referenceTweetId,
+            int retweetCount, int likesCount, String parentTweetId) {
         this.uuid = uuid;
         this.content = content;
         this.userId = userId;
         this.createdAt = createdAt;
+        this.referenceTweetId = referenceTweetId;
         this.retweetCount = retweetCount;
         this.likesCount = likesCount;
         this.parentTweetId = parentTweetId;
@@ -107,5 +172,13 @@ public class Tweet {
 
     public void setParentTweetId(String parentTweetId) {
         this.parentTweetId = parentTweetId;
+    }
+
+    public String getReferenceTweetId() {
+        return referenceTweetId;
+    }
+
+    public void setReferenceTweetId(String referenceTweetId) {
+        this.referenceTweetId = referenceTweetId;
     }
 }

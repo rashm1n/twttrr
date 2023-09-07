@@ -42,15 +42,34 @@ public class TweetService {
     }
 
     public Tweet createTweet(TweetRequestDTO tweetRequestDTO) {
-        Tweet tweet = tweetRepository.save(new Tweet(UUID.randomUUID().toString(), tweetRequestDTO.getContent(), tweetRequestDTO.getUserId(),
-                Instant.now(), 0,0,tweetRequestDTO.getParentTweetId()));
-        kafkaTemplate.send(topic, tweet.getUserId(), new TweetMessageDTO(
-                tweet.getUserId(),
-                tweet.getUuid().toString(),
-                tweet.getCreatedAt(),
+
+        Tweet tweet = Tweet.builder()
+                .uuid(UUID.randomUUID().toString())
+                .content(tweetRequestDTO.getContent())
+                .userId(tweetRequestDTO.getUserId())
+                .createdAt(Instant.now())
+                .parentTweetId(tweetRequestDTO.getParentTweetId())
+                .build();
+
+        Tweet savedTweet = tweetRepository.save(tweet);
+
+        kafkaTemplate.send(topic, savedTweet.getUserId(), new TweetMessageDTO(
+                savedTweet.getUserId(), savedTweet.getUuid(),
+                savedTweet.getCreatedAt(),
                 TweetMessageDTO.Action.CREATED
                 ));
-        return tweet;
+        return savedTweet;
+    }
+
+    public Tweet createTweet(Tweet tweet) {
+        Tweet savedTweet = tweetRepository.save(tweet);
+
+        kafkaTemplate.send(topic, savedTweet.getUserId(), new TweetMessageDTO(
+                savedTweet.getUserId(), savedTweet.getUuid(),
+                savedTweet.getCreatedAt(),
+                TweetMessageDTO.Action.CREATED
+        ));
+        return savedTweet;
     }
 
     // not supported yet
@@ -59,7 +78,7 @@ public class TweetService {
     }
 
     public void deleteTweet(String uuid) throws TweetNotFoundException {
-        Tweet fetchedTweet = null;
+        Tweet fetchedTweet;
         Optional<Tweet> tweet = tweetRepository.findById(uuid);
         if (tweet.isPresent()) {
             fetchedTweet = tweet.get();

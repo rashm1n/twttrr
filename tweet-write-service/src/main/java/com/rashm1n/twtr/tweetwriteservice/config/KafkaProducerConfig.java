@@ -1,7 +1,5 @@
 package com.rashm1n.twtr.tweetwriteservice.config;
 
-import com.rashm1n.twtr.tweetwriteservice.model.message.QuoteMessageDTO;
-import com.rashm1n.twtr.tweetwriteservice.model.message.RetweetMessageDTO;
 import com.rashm1n.twtr.tweetwriteservice.model.message.TweetMessageDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -35,16 +33,6 @@ public class KafkaProducerConfig {
 
     @Bean
     public KafkaTemplate<String, TweetMessageDTO> tweetKafkaTemplate(ProducerFactory<String, TweetMessageDTO> producerFactory) {
-        return new KafkaTemplate<>(producerFactory);
-    }
-
-    @Bean
-    public KafkaTemplate<String, RetweetMessageDTO> retweetKafkaTemplate(ProducerFactory<String, RetweetMessageDTO> producerFactory) {
-        return new KafkaTemplate<>(producerFactory);
-    }
-
-    @Bean
-    public KafkaTemplate<String, QuoteMessageDTO> quoteTweetKafkaTemplate(ProducerFactory<String, QuoteMessageDTO> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
 

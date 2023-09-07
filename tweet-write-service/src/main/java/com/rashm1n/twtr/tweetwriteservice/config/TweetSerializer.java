@@ -21,14 +21,11 @@ public class TweetSerializer implements Serializer<TweetMessageDTO> {
     public byte[] serialize(String s, TweetMessageDTO tweetMessageDTO) {
         try {
             if (tweetMessageDTO == null) {
-//                logger.info("Null received at serializing");
                 return null;
             } else {
-//                logger.info("Serializing . . .");
                 return objectMapper.writeValueAsBytes(tweetMessageDTO);
             }
         } catch (JsonProcessingException e) {
-//            logger.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }
