@@ -4,6 +4,7 @@ import com.rashm1n.twtr.tweetwriteservice.exception.TweetNotFoundException;
 import com.rashm1n.twtr.tweetwriteservice.model.TimelineDTO;
 import com.rashm1n.twtr.tweetwriteservice.model.Tweet;
 import com.rashm1n.twtr.tweetwriteservice.model.TweetRequestDTO;
+import com.rashm1n.twtr.tweetwriteservice.model.TweetResponseDTO;
 import com.rashm1n.twtr.tweetwriteservice.model.message.LikeMessageDTO;
 import com.rashm1n.twtr.tweetwriteservice.model.message.TweetMessageDTO;
 import com.rashm1n.twtr.tweetwriteservice.repository.TweetRepository;
@@ -29,14 +30,20 @@ public class TweetService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public Tweet getTweetByUUID(String uuid) {
-        Tweet tweet = tweetRepository.findById(uuid).get();
-        return tweet;
+    public TweetResponseDTO getTweetByUUID(String uuid) {
+        Optional<Tweet> tweetOptional = tweetRepository.findById(uuid);
+        if (tweetOptional.isPresent()) {
+            Tweet tweet = tweetOptional.get();
+            Long repliesCount = tweetRepository.countByParentTweetId(tweet.getUuid());
+            return new TweetResponseDTO(tweet, repliesCount);
+        }
+        // TODO: Handle Exception
+        return null;
     }
 
     public Tweet createTweet(TweetRequestDTO tweetRequestDTO) {
         Tweet tweet = tweetRepository.save(new Tweet(UUID.randomUUID().toString(), tweetRequestDTO.getContent(), tweetRequestDTO.getUserId(),
-                Instant.now(), 0,0));
+                Instant.now(), 0,0,tweetRequestDTO.getParentTweetId()));
         kafkaTemplate.send(topic, tweet.getUserId(), new TweetMessageDTO(
                 tweet.getUserId(),
                 tweet.getUuid().toString(),

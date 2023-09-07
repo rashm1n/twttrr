@@ -3,6 +3,7 @@ package com.rashm1n.twtr.tweetwriteservice.controller;
 import com.rashm1n.twtr.tweetwriteservice.model.TimelineDTO;
 import com.rashm1n.twtr.tweetwriteservice.model.Tweet;
 import com.rashm1n.twtr.tweetwriteservice.model.TweetRequestDTO;
+import com.rashm1n.twtr.tweetwriteservice.model.TweetResponseDTO;
 import com.rashm1n.twtr.tweetwriteservice.service.TweetService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +28,7 @@ public class TweetController {
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<Tweet> getTweetByUUID(@PathVariable String uuid) {
+    public ResponseEntity<TweetResponseDTO> getTweetByUUID(@PathVariable String uuid) {
         return ResponseEntity.ok(tweetService.getTweetByUUID(uuid));
     }
 

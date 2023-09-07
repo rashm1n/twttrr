@@ -9,4 +9,5 @@ import java.util.List;
 public interface TweetRepository extends CrudRepository<Tweet, String> {
     List<Tweet> findAllByUserId(String userId);
     List<Tweet> findAllByUserIdOrderByCreatedAtDesc(String userId);
+    Long countByParentTweetId(String parentTweetId);
 }

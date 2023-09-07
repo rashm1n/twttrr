@@ -6,7 +6,6 @@ public class TweetMessageDTO {
     private String user_id;
     private String tweet_id;
     private Instant timestamp;
-
     private Action action;
 
     public TweetMessageDTO(String user_id, String tweet_id, Instant timestamp, Action action) {

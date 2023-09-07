@@ -1,49 +1,49 @@
 package com.rashm1n.twtr.tweetwriteservice.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-
 import java.time.Instant;
-import java.util.UUID;
 
-@Entity
-public class Tweet {
-    @Id
-    @Column(columnDefinition = "VARCHAR2(36)")
-    private String uuid;
+public class TweetResponseDTO {
+    private String id;
     private String content;
     private String userId;
     private Instant createdAt;
     private int retweetCount;
     private int likesCount;
     private String parentTweetId;
+    private int repliesCount;
 
-    public Tweet() {
+    public TweetResponseDTO() {
     }
 
-    public Tweet(String uuid, String content, String userId, Instant createdAt, int retweetCount, int likesCount,
-            String parentTweetId) {
-        this.uuid = uuid;
+    public TweetResponseDTO(String id, String content, String userId, Instant createdAt, int retweetCount, int likesCount,
+            String parentTweetId, int repliesCount) {
+        this.id = id;
         this.content = content;
         this.userId = userId;
         this.createdAt = createdAt;
         this.retweetCount = retweetCount;
         this.likesCount = likesCount;
         this.parentTweetId = parentTweetId;
+        this.repliesCount = repliesCount;
     }
 
-    public Tweet incrementRetweetCount() {
-        this.retweetCount++;
-        return this;
+    public TweetResponseDTO(Tweet tweet, Long repliesCount) {
+        this.id = tweet.getUuid();
+        this.content = tweet.getContent();
+        this.userId = tweet.getUserId();
+        this.createdAt = tweet.getCreatedAt();
+        this.retweetCount = tweet.getRetweetCount();
+        this.likesCount = tweet.getLikesCount();
+        this.parentTweetId = tweet.getParentTweetId();
+        this.repliesCount = repliesCount.intValue();
     }
 
-    public String getUuid() {
-        return uuid;
+    public String getId() {
+        return id;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getContent() {
@@ -86,26 +86,19 @@ public class Tweet {
         this.likesCount = likesCount;
     }
 
-    public Tweet decrementRetweetCount() {
-        this.retweetCount--;
-        return this;
-    }
-
-    public Tweet incrementLikesCount() {
-        this.likesCount++;
-        return this;
-    }
-
-    public Tweet decrementLikesCount() {
-        this.likesCount--;
-        return this;
-    }
-
     public String getParentTweetId() {
         return parentTweetId;
     }
 
     public void setParentTweetId(String parentTweetId) {
         this.parentTweetId = parentTweetId;
+    }
+
+    public int getRepliesCount() {
+        return repliesCount;
+    }
+
+    public void setRepliesCount(int repliesCount) {
+        this.repliesCount = repliesCount;
     }
 }
