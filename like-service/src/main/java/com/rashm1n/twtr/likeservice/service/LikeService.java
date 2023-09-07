@@ -19,23 +19,25 @@ public class LikeService {
     }
 
     public Like createLike(LikeDTO likeDTO) {
-        Like like = new Like(likeDTO.getUserId(), likeDTO.getTweetId(), Instant.now());
+        Like like = new Like(likeDTO.getUserId(), likeDTO.getTweetId(), Instant.now(), likeDTO.isRetweet());
         LikeMessageDTO likeMessageDTO = new LikeMessageDTO(
                 like.getUserId(),
                 like.getTweetId(),
                 LikeMessageDTO.Action.LIKED,
-                like.getCreatedAt()
+                like.getCreatedAt(),
+                likeDTO.isRetweet()
         );
         likeKafkaTemplate.send(topic, like.getUserId(), likeMessageDTO);
         return like;
     }
 
-    public void deleteLike(String tweetId, String userId) {
+    public void deleteLike(String tweetId, String userId, boolean isRetweet) {
         LikeMessageDTO likeMessageDTO = new LikeMessageDTO(
                 userId,
                 tweetId,
                 LikeMessageDTO.Action.UNLIKED,
-                Instant.now()
+                Instant.now(),
+                isRetweet
         );
         likeKafkaTemplate.send(topic, userId, likeMessageDTO);
     }

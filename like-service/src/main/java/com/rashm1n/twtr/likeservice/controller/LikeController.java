@@ -21,8 +21,8 @@ public class LikeController {
     }
 
     @DeleteMapping("/{tweet_id}")
-    public ResponseEntity<Void> deleteLike(@PathVariable String tweet_id,@RequestParam String user) {
-        likeService.deleteLike(tweet_id, user);
+    public ResponseEntity<Void> deleteLike(@PathVariable String tweet_id,@RequestParam String user, @RequestParam boolean isRetweet) {
+        likeService.deleteLike(tweet_id, user, isRetweet);
         return ResponseEntity.ok().build();
     }
 }

@@ -6,14 +6,16 @@ public class Like {
     private String userId;
     private String tweetId;
     private Instant createdAt;
+    private boolean isRetweet;
 
     public Like() {
     }
 
-    public Like(String userId, String tweetId, Instant createdAt) {
+    public Like(String userId, String tweetId, Instant createdAt, boolean isRetweet) {
         this.userId = userId;
         this.tweetId = tweetId;
         this.createdAt = createdAt;
+        this.isRetweet = isRetweet;
     }
 
     public Like(String userId, String tweetId) {
@@ -43,5 +45,13 @@ public class Like {
 
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public boolean isRetweet() {
+        return isRetweet;
+    }
+
+    public void setRetweet(boolean retweet) {
+        isRetweet = retweet;
     }
 }

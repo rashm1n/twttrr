@@ -7,12 +7,14 @@ public class LikeMessageDTO {
     private String tweetId;
     private Action action;
     private Instant timestamp;
+    private boolean isRetweet;
 
-    public LikeMessageDTO(String userId, String tweetId, Action action, Instant timestamp) {
+    public LikeMessageDTO(String userId, String tweetId, Action action, Instant timestamp, boolean isRetweet) {
         this.userId = userId;
         this.tweetId = tweetId;
         this.action = action;
         this.timestamp = timestamp;
+        this.isRetweet = isRetweet;
     }
 
     public LikeMessageDTO() {
@@ -52,5 +54,13 @@ public class LikeMessageDTO {
 
     public void setTimestamp(Instant timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public boolean isRetweet() {
+        return isRetweet;
+    }
+
+    public void setRetweet(boolean retweet) {
+        isRetweet = retweet;
     }
 }
