@@ -1,5 +1,5 @@
 # twttrr
-A backend clone of twitter made with Java.
+A backend clone of twitter (X !) made with Java.
 
 ## Microservices
 ![image](https://github.com/rashm1n/twttrr/assets/33457890/4ee497b4-7e1e-47d4-af50-e0566cfee9a5)
