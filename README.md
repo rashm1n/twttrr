@@ -2,7 +2,8 @@
 A backend clone of twitter (X !) made with Java.
 
 ## Microservices
-![image](https://github.com/rashm1n/twttrr/assets/33457890/4ee497b4-7e1e-47d4-af50-e0566cfee9a5)
+![image](https://github.com/rashm1n/twttrr/assets/33457890/f5aa8ec7-ade6-4705-aa7d-dfcc0d016ac5)
+
 
 ## tweet-write-service
 
