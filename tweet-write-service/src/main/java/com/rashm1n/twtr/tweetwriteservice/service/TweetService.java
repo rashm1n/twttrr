@@ -63,13 +63,44 @@ public class TweetService {
 
     public Tweet createTweet(Tweet tweet) {
         Tweet savedTweet = tweetRepository.save(tweet);
-
-        kafkaTemplate.send(topic, savedTweet.getUserId(), new TweetMessageDTO(
-                savedTweet.getUserId(), savedTweet.getUuid(),
-                savedTweet.getCreatedAt(),
-                TweetMessageDTO.Action.CREATED
-        ));
+        sendTweetMessage(savedTweet, TweetMessageDTO.Action.CREATED);
         return savedTweet;
+    }
+
+    public Tweet createReferencedTweet(Tweet tweet) {
+        Tweet fetchedTweet;
+        Optional<Tweet> optionalTweet = tweetRepository.findById(tweet.getReferenceTweetId());
+        if (optionalTweet.isPresent()) {
+            fetchedTweet = optionalTweet.get();
+            tweetRepository.deleteById(tweet.getUuid());
+            Tweet savedTweet = tweetRepository.save(fetchedTweet.incrementRetweetCount());
+            sendTweetMessage(savedTweet, TweetMessageDTO.Action.CREATED);
+            return savedTweet;
+        } else {
+            throw new TweetNotFoundException();
+        }
+    }
+
+    public void deleteReferencedTweet(String uuid) {
+        Tweet fetchedTweet;
+        Optional<Tweet> tweet = tweetRepository.findById(uuid);
+        if (tweet.isPresent()) {
+            fetchedTweet = tweet.get();
+            tweetRepository.deleteById(uuid);
+            tweetRepository.save(fetchedTweet.decrementRetweetCount());
+            sendTweetMessage(fetchedTweet, TweetMessageDTO.Action.DELETED);
+        } else {
+            throw new TweetNotFoundException();
+        }
+    }
+
+    public void sendTweetMessage(Tweet tweet, TweetMessageDTO.Action action) {
+        kafkaTemplate.send(topic, tweet.getUserId(), new TweetMessageDTO(
+                tweet.getUserId(),
+                tweet.getUuid(),
+                tweet.getCreatedAt(),
+                action
+        ));
     }
 
     // not supported yet
@@ -83,17 +114,11 @@ public class TweetService {
         if (tweet.isPresent()) {
             fetchedTweet = tweet.get();
             tweetRepository.deleteById(uuid);
-            kafkaTemplate.send(topic, fetchedTweet.getUserId(), new TweetMessageDTO(
-                    fetchedTweet.getUserId(),
-                    fetchedTweet.getUuid().toString(),
-                    fetchedTweet.getCreatedAt(),
-                    TweetMessageDTO.Action.DELETED
-            ));
+            sendTweetMessage(fetchedTweet, TweetMessageDTO.Action.DELETED);
         } else {
             throw new TweetNotFoundException();
         }
     }
-
     public Optional<Tweet> getTweetOptionalById(String uuid) {
         return tweetRepository.findById(uuid);
     }
