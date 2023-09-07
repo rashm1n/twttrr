@@ -132,21 +132,16 @@ public class TweetService {
         return new TimelineDTO(userId, tweets);
     }
 
-    public Tweet likeTweet(LikeMessageDTO likeMessageDTO) {
-        Optional<Tweet> tweet = tweetRepository.findById(likeMessageDTO.getTweetId());
+    public Tweet likeOrUnlikeTweet(String tweetId, boolean like) {
+        Optional<Tweet> tweet = tweetRepository.findById(tweetId);
         if (tweet.isPresent()) {
             Tweet fetchedTweet = tweet.get();
-            fetchedTweet.incrementLikesCount();
-            return tweetRepository.save(fetchedTweet);
-        }
-        return null;
-    }
+            if (like) {
+                fetchedTweet.incrementLikesCount();
+            } else {
+                fetchedTweet.decrementLikesCount();
+            }
 
-    public Tweet unlikeTweet(LikeMessageDTO likeMessageDTO) {
-        Optional<Tweet> tweet = tweetRepository.findById(likeMessageDTO.getTweetId());
-        if (tweet.isPresent()) {
-            Tweet fetchedTweet = tweet.get();
-            fetchedTweet.decrementLikesCount();
             return tweetRepository.save(fetchedTweet);
         }
         return null;
