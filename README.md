@@ -1,6 +1,8 @@
 # twttrr
 A backend clone of twitter (X !) made with Java.
 
+[![Tweet Write Service Build and Docker Push](https://github.com/rashm1n/twttrr/actions/workflows/tweet-write-service-action.yml/badge.svg)](https://github.com/rashm1n/twttrr/actions/workflows/tweet-write-service-action.yml)
+
 ## Microservices
 ![image](https://github.com/rashm1n/twttrr/assets/33457890/f5aa8ec7-ade6-4705-aa7d-dfcc0d016ac5)
 
